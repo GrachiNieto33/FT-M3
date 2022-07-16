@@ -13,33 +13,41 @@ var fs = require('fs');
 var exercise = require('./exercise-two');
 var dirpath = path.join(__dirname, 'poem-two');
 var stanzas = fs.readdirSync(dirpath)
-.filter(function (filename) {
-	return filename[0] !== '.'
-})
-.map(function (filename) {
-	return fs.readFileSync(path.join(dirpath, filename)).toString();
-});
+	.filter(function (filename)
+	{
+		return filename[0] !== '.'
+	})
+	.map(function (filename)
+	{
+		return fs.readFileSync(path.join(dirpath, filename)).toString();
+	});
 
-function resetCalls(spy) {
+function resetCalls(spy)
+{
 	spy.__spy.calls = [];
 }
 
-describe('exercise two (involving poem two)', function () {
+describe('exercise two (involving poem two)', function ()
+{
 
-	beforeEach(function () {
+	beforeEach(function ()
+	{
 		resetCalls(blue);
 		resetCalls(magenta);
 	});
 
 	var blueCalls, redCalls;
-	beforeEach(function () {
+	beforeEach(function ()
+	{
 		blueCalls = blue.__spy.calls;
 		redCalls = magenta.__spy.calls;
 	});
 
 	var originalLog = console.log;
-	beforeEach(function () {
-		console.log = function () {
+	beforeEach(function ()
+	{
+		console.log = function ()
+		{
 			var args = [].slice.call(arguments);
 			console.log.calls.push({
 				args: args,
@@ -51,19 +59,25 @@ describe('exercise two (involving poem two)', function () {
 		console.log.calls = [];
 	});
 
-	function getLoggedDoneCalls () {
-		return console.log.calls.filter(function (call) {
-			return call.args.some(function (arg) {
+	function getLoggedDoneCalls()
+	{
+		return console.log.calls.filter(function (call)
+		{
+			return call.args.some(function (arg)
+			{
 				return /done/.test(arg);
 			});
 		});
 	}
 
-	describe('problemA', function () {
+	describe('problemA', function ()
+	{
 
-		xit('ignoring errors, logs the first and second stanza in any order, and a done message when both are complete', function (done) {
+		it('ignoring errors, logs the first and second stanza in any order, and a done message when both are complete', function (done)
+		{
 			exercise.problemA();
-			setTimeout(function () {
+			setTimeout(function ()
+			{
 				expect(blue).to.have.been.called.with(stanzas[0]);
 				expect(blue).to.have.been.called.with(stanzas[1]);
 				var loggedDoneCalls = getLoggedDoneCalls();
@@ -76,12 +90,16 @@ describe('exercise two (involving poem two)', function () {
 
 	});
 
-	describe('problemB', function () {
+	describe('problemB', function ()
+	{
 
-		xit('ignoring errors, logs all stanzas in any order, and a done message when all are complete', function (done) {
+		it('ignoring errors, logs all stanzas in any order, and a done message when all are complete', function (done)
+		{
 			exercise.problemB();
-			setTimeout(function () {
-				stanzas.forEach(function (stanza) {
+			setTimeout(function ()
+			{
+				stanzas.forEach(function (stanza)
+				{
 					expect(blue).to.have.been.called.with(stanza);
 				});
 				var loggedDoneCalls = getLoggedDoneCalls();
@@ -94,12 +112,16 @@ describe('exercise two (involving poem two)', function () {
 
 	});
 
-	describe('problemC', function () {
+	describe('problemC', function ()
+	{
 
-		xit('ignoring errors, logs all stanzas in the correct order, and a done message when all are complete', function (done) {
+		it('ignoring errors, logs all stanzas in the correct order, and a done message when all are complete', function (done)
+		{
 			exercise.problemC();
-			setTimeout(function () {
-				stanzas.forEach(function (stanza, index) {
+			setTimeout(function ()
+			{
+				stanzas.forEach(function (stanza, index)
+				{
 					var callArgs = blueCalls[index];
 					expect(callArgs[0]).to.equal(stanza);
 				});
@@ -113,15 +135,20 @@ describe('exercise two (involving poem two)', function () {
 
 	});
 
-	describe('problemD', function () {
+	describe('problemD', function ()
+	{
 
-		xit('logs all stanzas in the correct order; if an error occurs does not read the next file and instead logs the error; always logs done at the end', function (done) {
+		it('logs all stanzas in the correct order; if an error occurs does not read the next file and instead logs the error; always logs done at the end', function (done)
+		{
 			exercise.problemD();
-			setTimeout(function () {
-				blueCalls.forEach(function (callArgs, index) {
+			setTimeout(function ()
+			{
+				blueCalls.forEach(function (callArgs, index)
+				{
 					expect(callArgs[0]).to.equal(stanzas[index]);
 				});
-				if (redCalls.length) {
+				if (redCalls.length)
+				{
 					expect(redCalls.length).to.equal(1);
 					expect(redCalls[0][0]).to.be.instanceof(Error);
 					expect(blueCalls.length).to.be.below(8);
@@ -130,7 +157,8 @@ describe('exercise two (involving poem two)', function () {
 				expect(loggedDoneCalls).to.have.length(1);
 				var loggedDoneCall = loggedDoneCalls[0];
 				expect(loggedDoneCall.priorNumBlueCalls).to.equal(blueCalls.length);
-				if (blueCalls.length !== stanzas.length) {
+				if (blueCalls.length !== stanzas.length)
+				{
 					expect(loggedDoneCall.priorNumRedCalls).to.equal(1);
 				}
 				done();
